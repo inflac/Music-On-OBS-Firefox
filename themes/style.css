@@ -1,0 +1,85 @@
+:root {
+  --sitebar-background-color: #1a1a1a;
+  --sitebar-border-color: #111111;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--background-color);
+  color: var(--primary-text-color);
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.1em;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+button {
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.2s ease;
+  width: 100%;
+}
+
+button:hover {
+  background-color:  var(--primary-hover-color);;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out;
+  margin-bottom: 16px;
+}
+
+input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 3px var(--primary-hover-color);
+}
+
+select {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out;
+  margin-bottom: 16px;
+}
+
+select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 3px var(--primary-hover-color);
+}
+
+code {
+  white-space: pre-wrap; /* Zeilenumbrüche erhalten und Text umbrechen */
+  word-break: break-word; /* Längere Wörter umbrechen, falls nötig */
+  font-family: monospace, monospace;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-text-color);
+  background-color: var(--shadow-color);
+}

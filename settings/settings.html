@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+
+  <link id="theme-link" rel="stylesheet" href="../themes/dark.css" />
+  <link rel="stylesheet" href="../themes/style.css" />
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-menu">
+          <button class="sidebar-button">Preferences</button>
+          <button class="sidebar-button">OBS</button>
+          <button class="sidebar-button">Spotify</button>
+        </div>
+        
+        <footer class="sidebar-footer">
+          <p>❤️ Made by <a href="https://github.com/inflac" target="_blank">inflac</a></p>
+        </footer>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="container">
+        <h1>⚙️ Extension Settings</h1>
+
+        <!-- Preferences Page -->
+        <div id="page-preferences" class="settings-page">
+          <h2>Preferences</h2>
+          <div>
+            <label for="theme-select">Select Theme:</label>
+            <select id="theme-select"></select>
+          </div>
+        </div>
+
+        <!-- OBS Page -->
+        <div id="page-obs" class="settings-page" style="display:none;">
+          <h2>OBS Settings</h2>
+          <p>Here you can configure the connection between MOOF and OBS.<br>
+          For instructions on how to connect MOOF with OBS, take a look <a href="https://github.com">here</a></p>
+          <label for="obs-source">OBS Source name</label>
+          <input type="text" id="obs-source" name="obs-source"><br>
+          <label for="serverport">Websocket Serverport</label>
+          <input type="number" min="0" max="65535" placeholder="4455" id="serverport" name="serverport"><br>
+          <label for="serverpassword">Websocket Serverpassword</label>
+          <input type="password" id="serverpassword" name="serverpassword">
+        </div>
+
+        <!-- Spotify Page -->
+        <div id="page-spotify" class="settings-page" style="display:none;">
+          <h2>Spotify Settings</h2>
+          <p>Here you can connect your Spotify account to use it as a source.<br>
+          For instructions on how to connect MOOF with Spotify, take a look <a href="https://github.com">here</a></p>
+          <p>
+            Redirect URI to register in your Spotify app settings:<br>
+            <code id="spotify-redirect-uri">Loading...</code>
+          </p>
+
+          <label for="spotify-client-id">Spotify Client ID</label>
+          <input type="text" id="spotify-client-id" placeholder="Enter your Client ID">
+          <button id="spotify-connect">Connect to Spotify</button>
+          <p id="spotify-status"></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../utils/theme.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

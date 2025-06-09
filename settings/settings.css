@@ -1,0 +1,85 @@
+a {
+  color: var(--primary-text-color);
+}
+
+a:hover {
+  color: var(--primary-hover-color)
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 25%;
+  max-width: 250px;
+  background-color: var(--sitebar-background-color);
+  color: var(--primary-text-color);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.sidebar button {
+  border-radius: 0px;
+}
+
+.sidebar a {
+  color: white;
+}
+
+.sidebar a:hover {
+  color: var(--primary-hover-color);
+}
+
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.sidebar-menu {
+  flex-grow: 1; /* Show footer at the sidebars bottom */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Gap between buttons*/
+}
+
+.sidebar-button.active {
+  background-color: var(--primary-hover-color);
+  font-weight: bold;
+  text-shadow:
+                -1px -1px 0 var(--shadow-color),
+                1px -1px 0 var(--shadow-color),
+                -1px 1px 0 var(--shadow-color),
+                1px 2px 0 var(--shadow-color),
+                -2px 0px 0 var(--shadow-color),
+                2px 0px 0 var(--shadow-color),
+                0px -2px 0 var(--shadow-color),
+                0px 2px 0 var(--shadow-color);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  font-size: 0.8em;
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px solid white; /* Footer seperator */
+  color: white; /* Credits text color in Footer */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--primary-text-color);
+}
+
+.container button {
+  max-width: 250px;
+}

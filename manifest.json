@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "OBS Music (Firefox Edition)",
+  "version": "1.0",
+  "description": "Show currently playing song on YouTube for OBS.",
+  "author": "inflac",
+  "permissions": ["scripting", "tabs", "storage", "identity"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://accounts.spotify.com https://api.spotify.com ws://localhost:4455"
+  },
+  "host_permissions": ["https://www.youtube.com/*"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "addon@example.com"
+    }
+  },
+  "background": {
+    "scripts": [
+      "./libs/obs-websocket-5.0.6.js",
+      "./sources/spotify.js",
+      "background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["sources/youtube.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "settings/settings.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "48": "images/icons/music-on-obs-firefox-48.png"
+    }
+  },
+  "icons": {
+    "48": "images/icons/music-on-obs-firefox-48.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["themes/*.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
