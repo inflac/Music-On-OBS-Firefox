@@ -4,15 +4,23 @@
   "version": "1.0",
   "description": "Show currently playing song on YouTube for OBS.",
   "author": "inflac",
-  "permissions": ["scripting", "tabs", "storage", "identity"],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://accounts.spotify.com https://api.spotify.com ws://localhost:4455"
-  },
-  "host_permissions": ["https://www.youtube.com/*"],
+  "permissions": [
+    "scripting",
+    "tabs",
+    "storage",
+    "identity"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*"
+  ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "addon@example.com"
+      "id": "moof@inflacsan.de",
+      "strict_min_version": "109.0"
     }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://accounts.spotify.com https://api.spotify.com ws://localhost:4455"
   },
   "background": {
     "scripts": [
