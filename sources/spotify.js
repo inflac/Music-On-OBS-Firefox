@@ -39,16 +39,15 @@ async function fetchCurrentSpotifySong() {
 
     if (!data.is_playing) {
       console.log("[MOOF][SPOTIFY] Track is paused");
-      setNowPlaying("spotify", "");
+      setNowPlaying("spotify", {title: "_stop_", author: "_stop_", source: "spotify"});
       return;
     }
 
-    const track = data.item.name;
+    const title = data.item.name;
     const artists = data.item.artists.map(artist => artist.name).join(", ");
-    const songInfo = `${track} - ${artists}`;
 
     console.log(`[MOOF][SPOTIFY] Currently playing: ${songInfo}`);
-    setNowPlaying("spotify", songInfo);
+    setNowPlaying("spotify", {title, author: artists, source: "spotify"});
   } catch (err) {
     console.error("[MOOF][SPOTIFY] Failed to parse JSON:", err);
   }

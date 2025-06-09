@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initPageSwitching();
   await initThemeSelector();
   await initOBSSettings();
+  await initOverlayTemplate();
   await initSpotifySettings();
   displayRedirectUri();
 });
@@ -11,6 +12,7 @@ function initPageSwitching() {
   const pages = {
     preferences: document.getElementById("page-preferences"),
     obs: document.getElementById("page-obs"),
+    overlay: document.getElementById("page-overlay"),
     spotify: document.getElementById("page-spotify"),
   };
 
@@ -71,6 +73,51 @@ async function initOBSSettings() {
   obsSource.addEventListener("change", () => updateStorage("obsSource", obsSource.value));
   serverPort.addEventListener("change", () => updateStorage("serverport", serverPort.value));
   serverPassword.addEventListener("change", () => updateStorage("serverpassword", serverPassword.value));
+}
+
+// Overlay Settings
+async function initOverlayTemplate() {
+  const input = document.getElementById("obs-template");
+  const preview = document.getElementById("obs-preview");
+
+  document.querySelectorAll(".var-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const insert = btn.dataset.insert;
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const text = input.value;
+      input.value = text.slice(0, start) + insert + text.slice(end);
+      input.focus();
+      input.setSelectionRange(start + insert.length, start + insert.length);
+      
+      // Manually trigger input event so debounced save & preview run
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+  });
+
+  let debounceTimer;
+
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async () => {
+      await browser.storage.local.set({ obsTemplate: input.value });
+      updatePreview();
+    }, 500);
+  });
+
+  const { obsTemplate } = await browser.storage.local.get("obsTemplate");
+  if (obsTemplate) {
+    input.value = obsTemplate;
+    updatePreview();
+  }
+
+  function updatePreview() {
+    const val = input.value
+      .replace(/<!__title__!>/g, "Title Example")
+      .replace(/<!__author__!>/g, "Author Name")
+      .replace(/<!__source__!>/g, "YouTube");
+    preview.textContent = val;
+  }
 }
 
 // --- Spotify Auth ---

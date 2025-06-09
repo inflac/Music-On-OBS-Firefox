@@ -16,6 +16,7 @@
         <div class="sidebar-menu">
           <button class="sidebar-button">Preferences</button>
           <button class="sidebar-button">OBS</button>
+          <button class="sidebar-button">Overlay</button>
           <button class="sidebar-button">Spotify</button>
         </div>
         
@@ -65,6 +66,29 @@
           <input type="text" id="spotify-client-id" placeholder="Enter your Client ID">
           <button id="spotify-connect">Connect to Spotify</button>
           <p id="spotify-status"></p>
+        </div>
+
+        <!-- Overlay Page -->
+        <div id="page-overlay" class="settings-page" style="display:none;">
+          <h2>Overlay</h2>
+          <label for="obs-template">Message sent to OBS:</label>
+          <input type="text" id="obs-template" placeholder="Example: Now playing: <!__title__!> by <!__author__!>" style="width:100%; padding: 0.5em; font-family: monospace; margin-bottom: 1em;" />
+
+          <p><strong>Available Variables:</strong> (click to insert)</p>
+          <div id="obs-vars" style="display: flex; flex-wrap: wrap; gap: 0.5em;">
+            <button type="button" class="var-btn" data-insert="<!__title__!>">Title</button>
+            <button type="button" class="var-btn" data-insert="<!__author__!>">Author</button>
+            <button type="button" class="var-btn" data-insert="<!__source__!>">Source</button>
+          </div>
+
+          <ul style="margin-top: 1em; font-size: 0.9em; color: #666;">
+            <li><code>&lt;!__title__!&gt;</code> - Song or video title</li>
+            <li><code>&lt;!__author__!&gt;</code> - Artist or channel name</li>
+            <li><code>&lt;!__source__!&gt;</code> - The platform (e.g., YouTube, Spotify)</li>
+          </ul>
+
+          <p><strong>Preview:</strong></p>
+          <div class="obs-preview" id="obs-preview"></div>
         </div>
 
       </div>

@@ -23,7 +23,7 @@ async function connectToOBS(serverPort, serverPassword) {
   }
 }
 
-async function updateSongInOBS(songTitle) {
+async function updateTextInOBS(songInfoString) {
   const { serverport, serverpassword, obsSource } = await browser.storage.local.get([
     "serverport",
     "serverpassword",
@@ -40,9 +40,12 @@ async function updateSongInOBS(songTitle) {
   try {
     await obs.call("SetInputSettings", {
       inputName: obsSource,
-      inputSettings: { text: songTitle }
+      inputSettings: {
+        text: songInfoString
+      },
+      overlay: true // preserves other settings
     });
-    console.log(`Updated OBS source '${obsSource}' to: ${songTitle}`);
+    console.log(`[MOOF] Updated OBS source '${obsSource}' to: ${songInfoString}`);
   } catch (error) {
     console.error("[MOOF] OBS call error:", error.code, error.message);
   }
@@ -58,34 +61,54 @@ function getSelectedSource() {
     });
 }
 
-function setNowPlaying(source, title) {
-  if (currentSongs[source] === title) {
-    console.log("[MOOF] Title already set - skipping update in OBS");
+async function setNowPlaying(source, trackInfo) {
+  const songInfoString = await craftSongInfo(trackInfo);
+
+  const existing = currentSongs[source];
+  if (existing && existing.formatted === songInfoString && existing.info?.title === trackInfo.title) {
+    console.log("[MOOF] Song info already set - skipping update in OBS");
     return;
   }
-  currentSongs[source] = title;
 
-  getSelectedSource().then((selectedSource) => {
-    if (selectedSource === source) {
-      console.log("[MOOF] Now playing from", source, ":", title);
-      updateSongInOBS(title);
-    }
-  });
+  currentSongs[source] = {
+    info: trackInfo,
+    formatted: songInfoString
+  };
+
+  const selectedSource = await getSelectedSource();
+  if (selectedSource === source) {
+    await updateTextInOBS(songInfoString);
+  }
+}
+
+async function craftSongInfo(trackInfo = {}) {
+  const { obsTemplate } = await browser.storage.local.get("obsTemplate");
+  if (!obsTemplate) return "";
+
+  // Recognize stop indicator and return empty Song Info
+  if (trackInfo.title === "_stop_" && trackInfo.author === "_stop_") { 
+    return ""; 
+  }
+
+  return obsTemplate
+    .replace(/<!__title__!>/g, trackInfo.title || "")
+    .replace(/<!__author__!>/g, trackInfo.author || "")
+    .replace(/<!__source__!>/g, trackInfo.source || "");
 }
 
 // --- Message Handlers ---
-browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+browser.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   if (msg.type === "nowPlaying") {
-    setNowPlaying(msg.source, msg.title);
+    await setNowPlaying(msg.source, msg);
   }
 
   if (msg.type === "getCurrentSong") {
-    getSelectedSource().then((selectedSource) => {
-      const song = currentSongs[selectedSource] || "";
-      console.log("[MOOF] getCurrentSong for", selectedSource, ":", song);
-      sendResponse({ title: song });
-    });
-    return true; // Keep the message channel open
+    const selectedSource = await getSelectedSource();
+    const song = currentSongs[selectedSource];
+    const title = song?.info?.title || "";
+    console.log("[MOOF] getCurrentSong for", selectedSource, ":", title);
+    sendResponse({ title });
+    return true; // async response expected
   }
 });
 
