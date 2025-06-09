@@ -1,4 +1,4 @@
-const themes = ["dark", "light"];
+const themes = ["dark", "light", "solar", "twitch"];
 
 function getThemes() {
   // Return list of theme names
