@@ -2,6 +2,8 @@
 
 [![Validate Firefox Extension](https://github.com/inflac/Music-On-OBS-Firefox/actions/workflows/validate-extension.yaml/badge.svg)](https://github.com/inflac/Music-On-OBS-Firefox/actions/workflows/validate-extension.yaml)
 
+[![Firefox Add-on](https://img.shields.io/amo/v/music-on-obs-fox?label=Firefox&logo=firefox)](https://addons.mozilla.org/en-US/firefox/addon/music-on-obs-fox/)
+
 **MOOF** is a Firefox browser extension that captures the currently playing song title from sources like YouTube and Spotify and sends it in real-time via WebSocket for display in OBS.
 
 ---

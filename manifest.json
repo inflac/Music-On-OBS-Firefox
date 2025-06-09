@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Music On OBS Fox",
   "version": "1.0",
-  "description": "Show currently playing song on YouTube for OBS.",
+  "description": "Displays the currently playing song on websites like YouTube and Spotify, and sends it to OBS via WebSocket for live overlay.",
   "author": "inflac",
   "permissions": [
     "scripting",
