@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "dotenv-cli": "^8.0.0",
     "web-ext": "^8.7.1"
   }
 }

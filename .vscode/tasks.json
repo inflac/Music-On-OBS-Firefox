@@ -28,6 +28,17 @@
       "command": "npx web-ext run --devtools",
       "problemMatcher": [],
       "isBackground": true
+    },
+    {
+      "label": "Publish",
+      "type": "shell",
+      "command": "dotenv -e .env -- npx web-ext sign --channel=listed --api-key=$AMO_JWT_ISSUER --api-secret=$AMO_JWT_SECRET",
+      "dependsOn": ["Build"],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }
