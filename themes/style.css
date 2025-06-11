@@ -78,7 +78,7 @@ select:focus {
 code {
   white-space: pre-wrap; /* Zeilenumbrüche erhalten und Text umbrechen */
   word-break: break-word; /* Längere Wörter umbrechen, falls nötig */
-  font-family: monospace, monospace;
+  font-family: monospace;
   border: 1px solid var(--primary-color);
   color: var(--primary-text-color);
   background-color: var(--shadow-color);
