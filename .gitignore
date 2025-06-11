@@ -1,0 +1,12 @@
+# Node modules
+node_modules/
+
+# Web-ext build output
+web-ext-artifacts/
+*.zip
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

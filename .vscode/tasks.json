@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Lint",
+      "type": "shell",
+      "command": "npx web-ext lint --output text --pretty --warnings-as-errors",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Build",
+      "type": "shell",
+      "command": "npx web-ext build --overwrite-dest",
+      "dependsOn": ["Lint"],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run",
+      "type": "shell",
+      "command": "npx web-ext run --devtools",
+      "problemMatcher": [],
+      "isBackground": true
+    }
+  ]
+}

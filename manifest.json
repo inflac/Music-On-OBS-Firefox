@@ -16,7 +16,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "moof@inflacsan.de",
-      "strict_min_version": "109.0"
+      "strict_min_version": "139.0"
     }
   },
   "content_security_policy": {
