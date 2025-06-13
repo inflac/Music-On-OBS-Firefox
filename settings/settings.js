@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   await initOverlayTemplate();
   await initSpotifySettings();
   displayRedirectUri();
+  const version = browser.runtime.getManifest().version;
+  const moofversion = document.getElementById('moof-version');
+  moofversion.textContent = version;
+  moofversion.href = `https://github.com/inflac/Music-On-OBS-Firefox/releases/tag/v${version}`;
 });
 
 // --- UI Navigation ---
