@@ -1,16 +1,13 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Music On OBS Fox",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Displays the currently playing song on websites like YouTube and Spotify, and sends it to OBS via WebSocket for live overlay.",
   "author": "inflac",
   "permissions": [
-    "scripting",
     "tabs",
     "storage",
-    "identity"
-  ],
-  "host_permissions": [
+    "identity",
     "https://www.youtube.com/*"
   ],
   "browser_specific_settings": {
@@ -19,9 +16,7 @@
       "strict_min_version": "139.0"
     }
   },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://accounts.spotify.com https://api.spotify.com ws://localhost:4455"
-  },
+  "content_security_policy": "script-src 'self'; object-src 'self'; connect-src 'self' https://accounts.spotify.com https://api.spotify.com ws://localhost:4455;",
   "background": {
     "scripts": [
       "./libs/obs-websocket-5.0.6.js",
@@ -40,7 +35,7 @@
     "page": "settings/settings.html",
     "open_in_tab": true
   },
-  "action": {
+  "browser_action": {
     "default_popup": "popup/popup.html",
     "default_icon": {
       "48": "images/icons/music-on-obs-firefox-48.png"
@@ -50,9 +45,6 @@
     "48": "images/icons/music-on-obs-firefox-48.png"
   },
   "web_accessible_resources": [
-    {
-      "resources": ["themes/*.css"],
-      "matches": ["<all_urls>"]
-    }
+    "themes/*.css"
   ]
 }

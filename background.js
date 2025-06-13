@@ -63,17 +63,28 @@ function getSelectedSource() {
 
 async function setNowPlaying(source, trackInfo) {
   const songInfoString = await craftSongInfo(trackInfo);
+  const storageKey = `currentSong_${source}`;
+  
+  const stored = await browser.storage.local.get(storageKey);
+  const existing = stored[storageKey];
 
-  const existing = currentSongs[source];
-  if (existing && existing.formatted === songInfoString && existing.info?.title === trackInfo.title) {
-    console.log("[MOOF] Song info already set - skipping update in OBS");
+  // Check if already set
+  if (
+    existing &&
+    existing.formatted === songInfoString &&
+    existing.info?.title === trackInfo.title
+  ) {
+    console.log("[MOOF] Song info already set in storage - skipping update");
     return;
   }
 
-  currentSongs[source] = {
-    info: trackInfo,
-    formatted: songInfoString
-  };
+  // Update new song info
+  await browser.storage.local.set({
+    [storageKey]: {
+      info: trackInfo,
+      formatted: songInfoString
+    }
+  });
 
   const selectedSource = await getSelectedSource();
   if (selectedSource === source) {
@@ -97,18 +108,21 @@ async function craftSongInfo(trackInfo = {}) {
 }
 
 // --- Message Handlers ---
-browser.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "nowPlaying") {
-    await setNowPlaying(msg.source, msg);
+    setNowPlaying(msg.source, msg);
   }
 
   if (msg.type === "getCurrentSong") {
-    const selectedSource = await getSelectedSource();
-    const song = currentSongs[selectedSource];
-    const title = song?.info?.title || "";
-    console.log("[MOOF] getCurrentSong for", selectedSource, ":", title);
-    sendResponse({ title });
-    return true; // async response expected
+    getSelectedSource().then(async (selectedSource) => {
+      const storageKey = `currentSong_${selectedSource}`;
+      const stored = await browser.storage.local.get(storageKey);
+      const song = stored[storageKey];
+      const title = (song?.info?.title === "_stop_") ? "" : (song?.info?.title || "");
+      console.log("[MOOF] getCurrentSong for", selectedSource, ":", title);
+      sendResponse({ title });
+    });
+    return true;
   }
 });
 
@@ -125,3 +139,6 @@ browser.storage.onChanged.addListener((changes, area) => {
     }
   }
 });
+
+
+console.log("[MOOF] background.js started");

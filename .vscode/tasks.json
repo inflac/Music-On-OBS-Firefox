@@ -32,13 +32,17 @@
     {
       "label": "Publish",
       "type": "shell",
-      "command": "dotenv -e .env -- npx web-ext sign --channel=listed --api-key=$AMO_JWT_ISSUER --api-secret=$AMO_JWT_SECRET",
-      "dependsOn": ["Build"],
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-File", ".vscode/publish.ps1"
+      ],
       "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "group": "build",
+      "dependsOn": ["build"]
     }
   ]
 }
+
+//web-ext sign --channel=listed --api-key=$env:AMO_JWT_ISSUER --api-secret=$env:AMO_JWT_SECRET

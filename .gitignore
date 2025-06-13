@@ -13,3 +13,6 @@ pnpm-debug.log*
 
 # Enviroment variables
 .env
+
+# web-ext
+.amo-upload-uuid
