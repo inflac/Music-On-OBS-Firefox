@@ -18,8 +18,10 @@ async function connectToOBS(serverPort, serverPassword) {
         isConnected = false;
       });
     }
+    return true;
   } catch (error) {
     console.error("[MOOF] Failed to connect to OBS WebSocket:", error.code, error.message);
+    return false;
   }
 }
 
@@ -122,6 +124,13 @@ browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       const title = (song?.info?.title === "_stop_") ? "" : (song?.info?.title || "");
       console.log("[MOOF] getCurrentSong for", selectedSource, ":", title);
       sendResponse({ title });
+    });
+    return true;
+  }
+
+  if (msg.type == "connectOBS") {
+    connectToOBS(msg.port, msg.password).then(async (status) => {
+      sendResponse({ status });
     });
     return true;
   }

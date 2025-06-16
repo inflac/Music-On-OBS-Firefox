@@ -60,7 +60,7 @@ async function initThemeSelector() {
   themeSelect.addEventListener("change", async (e) => {
     const selected = e.target.value;
     themeLink.href = `../themes/${selected}.css`;
-    await browser.storage.local.set({ theme: selected });
+    await updateStorage("theme", selected);
   });
 }
 
@@ -77,6 +77,17 @@ async function initOBSSettings() {
   obsSource.addEventListener("change", () => updateStorage("obsSource", obsSource.value));
   serverPort.addEventListener("change", () => updateStorage("serverport", serverPort.value));
   serverPassword.addEventListener("change", () => updateStorage("serverpassword", serverPassword.value));
+
+  document.getElementById("obs-connect").addEventListener("click", async () => {
+    browser.runtime.sendMessage({ type: "connectOBS", port: serverPort.value, password: serverPassword.value }).then((response) => {
+      const statusEl = document.getElementById("obs-status");
+      if (response.status) {
+        statusEl.textContent = "Successfully connected ✅";
+      } else {
+        statusEl.textContent = "Connection failed ❌";
+      }
+    });
+  });
 }
 
 // Overlay Settings
@@ -104,7 +115,7 @@ async function initOverlayTemplate() {
   input.addEventListener("input", () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(async () => {
-      await browser.storage.local.set({ obsTemplate: input.value });
+      await updateStorage("obsTemplate", input.value);
       updatePreview();
     }, 500);
   });
@@ -136,15 +147,15 @@ async function initSpotifySettings() {
   // Save client ID changes
   clientIdInput.addEventListener("change", async () => {
     const newId = clientIdInput.value.trim();
-    await browser.storage.local.set({ spotifyToken: "" }); // Reset Token
-    await browser.storage.local.set({ spotifyRefreshToken: "" }); // Reset refresh Token
+    await updateStorage("spotifyToken", ""); // Reset Token
+    await updateStorage("spotifyRefreshToken", ""); // Reset refresh Token
 
     if (!isValidSpotifyClientId(newId)) {
       statusEl.textContent = "❌ Invalid Client ID format.";
       return
     }
 
-    await browser.storage.local.set({ spotifyClientId: newId });
+    await updateStorage("spotifyClientId", newId);
     statusEl.textContent = "💾 Saved. Reload or reconnect to apply.";
   });
 
@@ -164,7 +175,7 @@ async function initSpotifySettings() {
       const { code_verifier, code_challenge } = await generatePKCECodes();
       const SCOPES = "user-read-currently-playing user-read-playback-state";
 
-      await browser.storage.local.set({ code_verifier });
+      await updateStorage("code_verifier", code_verifier);
 
       const authUrl = new URL("https://accounts.spotify.com/authorize");
       authUrl.searchParams.set("client_id", CLIENT_ID);
@@ -199,10 +210,8 @@ async function initSpotifySettings() {
       const data = await tokenRes.json();
 
       if (data.access_token) {
-          await browser.storage.local.set({ 
-            spotifyToken: data.access_token,
-            spotifyRefreshToken: data.refresh_token
-          });
+        await updateStorage("spotifyToken", data.access_token);
+        await updateStorage("spotifyRefreshToken", data.refresh_token);
         statusEl.textContent = "✅ Connected to Spotify!";
       } else {
         console.error("[MOOF] Token exchange failed:", data);
@@ -238,10 +247,10 @@ async function refreshSpotifyToken() {
   const data = await tokenRes.json();
 
   if (data.access_token) {
-    await browser.storage.local.set({ spotifyToken: data.access_token });
+    await updateStorage(spotifyToken, data.access_token);
     if (data.refresh_token) {
       // Sometimes Spotify issues a new refresh token — update if present
-      await browser.storage.local.set({ spotifyRefreshToken: data.refresh_token });
+      await updateStorage(spotifyRefreshToken, data.refresh_token);
     }
     return data.access_token;
   } else {
