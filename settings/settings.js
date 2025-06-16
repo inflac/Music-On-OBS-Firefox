@@ -159,6 +159,7 @@ async function initSpotifySettings() {
   await updateSpotifyStatus(statusEl);
 
   document.getElementById("spotify-connect").addEventListener("click", async () => {
+    console.log("Connect to Spotify was clicked");
     try {
       const { code_verifier, code_challenge } = await generatePKCECodes();
       const SCOPES = "user-read-currently-playing user-read-playback-state";

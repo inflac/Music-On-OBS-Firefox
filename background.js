@@ -67,12 +67,14 @@ async function setNowPlaying(source, trackInfo) {
   
   const stored = await browser.storage.local.get(storageKey);
   const existing = stored[storageKey];
+  const selectedSource = await getSelectedSource();
 
   // Check if already set
   if (
     existing &&
     existing.formatted === songInfoString &&
-    existing.info?.title === trackInfo.title
+    existing.info?.title === trackInfo.title &&
+    selectedSource !== source
   ) {
     console.log("[MOOF] Song info already set in storage - skipping update");
     return;
@@ -86,10 +88,8 @@ async function setNowPlaying(source, trackInfo) {
     }
   });
 
-  const selectedSource = await getSelectedSource();
-  if (selectedSource === source) {
-    await updateTextInOBS(songInfoString);
-  }
+  await updateTextInOBS(songInfoString);
+
 }
 
 async function craftSongInfo(trackInfo = {}) {
@@ -110,6 +110,7 @@ async function craftSongInfo(trackInfo = {}) {
 // --- Message Handlers ---
 browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "nowPlaying") {
+    console.log("[MOOF] Received new song:", msg.title, "from source:", msg.source)
     setNowPlaying(msg.source, msg);
   }
 

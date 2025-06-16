@@ -16,6 +16,7 @@ async function fetchCurrentSpotifySong() {
 
   if (response.status === 204) {
     console.log("[MOOF][SPOTIFY] No song currently playing.");
+    setNowPlaying("spotify", {title: "_stop_", author: "_stop_", source: "spotify"});
     return;
   }
 
